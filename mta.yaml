@@ -1,0 +1,131 @@
+## Generated mta.yaml based on template version 0.4.0
+## appName = patientmanagement
+## language=nodejs; multiTenant=false
+## approuter=
+_schema-version: '3.1'
+ID: virtualprescription
+version: 1.0.0
+description: "virtualprescription"
+parameters:
+  enable-parallel-deployments: true
+   
+build-parameters:
+  before-all:
+   - builder: custom
+     commands:
+      - npm install --production
+      - npx -p @sap/cds-dk cds build --production
+
+modules:
+ - name: patientmanagement-app-router
+   type: approuter.nodejs
+   path: approuter
+   parameters:
+     disk-quota: 512M
+     memory: 512M
+   requires:
+     - name: virtualprescription_uaa
+     - name: virtualprescription_html5_repo_runtime
+     - name: virtualprescription_portal
+     - name: srv-api
+       group: destinations
+       properties:
+         name: srv-api
+         url: "~{srv-url}"
+         forwardAuthToken: true  
+         
+ - name: virtualprescription_ui_deployer
+   type: com.sap.application.content
+   path: deployer
+   requires:
+     - name: virtualprescription_html5_repo_host
+       parameters:
+         content-target: true
+   build-parameters:
+     build-result: resources
+     requires:
+       - name: patientmanagement
+         artifacts:
+           - dist/uimodule.zip
+         target-path: resources/
+ - name: patientmanagement
+   type: html5
+   path: patientmanagement
+   build-parameters:
+     builder: custom
+     commands:
+       - npm install
+       - npm run build
+     supported-platforms: []
+
+ - name: virtualprescription_launchpad_deployer
+   type: com.sap.portal.content
+   path: launchpad
+   deployed-after:
+     - virtualprescription_ui_deployer
+   requires:
+     - name: virtualprescription_portal
+     - name: virtualprescription_html5_repo_host
+     - name: virtualprescription_uaa        
+
+ # --------------------- SERVER MODULE ------------------------
+ - name: virtualprescription-srv
+ # ------------------------------------------------------------
+   type: nodejs
+   path: gen/srv
+   requires:
+    # Resources extracted from CAP configuration
+    - name: virtualprescription-db
+   provides:
+    - name: srv-api      # required by consumers of CAP services (e.g. approuter)
+      properties:
+        srv-url: ${default-url}
+
+ # -------------------- SIDECAR MODULE ------------------------
+ - name: virtualprescription-db-deployer
+ # ------------------------------------------------------------
+   type: hdb
+   path: gen/db  
+   parameters:
+     buildpack: nodejs_buildpack
+   requires:
+    # 'hana' and 'xsuaa' resources extracted from CAP configuration
+    - name: virtualprescription-db
+
+
+resources:
+ # services extracted from CAP configuration
+ # 'service-plan' can be configured via 'cds.requires.<name>.vcap.plan'
+# ------------------------------------------------------------
+ - name: virtualprescription-db
+# ------------------------------------------------------------
+   type: com.sap.xs.hdi-container
+   parameters:
+     service: hanatrial  # or 'hanatrial' on trial landscapes
+     service-plan: hdi-shared
+   properties:
+     hdi-service-name: ${service-name}
+
+ - name: virtualprescription_uaa
+   type: org.cloudfoundry.managed-service
+   parameters:
+     path: ./xs-security.json
+     service-plan: application
+     service: xsuaa
+ - name: virtualprescription_html5_repo_runtime
+   type: org.cloudfoundry.managed-service
+   parameters:
+     service-plan: app-runtime
+     service: html5-apps-repo
+ - name: virtualprescription_html5_repo_host
+   type: org.cloudfoundry.managed-service
+   parameters:
+     service-plan: app-host
+     service: html5-apps-repo
+     config:
+       sizeLimit: 1
+ - name: virtualprescription_portal
+   type: org.cloudfoundry.managed-service
+   parameters:
+     service-plan: standard
+     service: portal

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="PatientAdmin" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="Countries" EntityType="PatientAdmin.Countries"/>
+                <EntitySet Name="Countries_texts" EntityType="PatientAdmin.Countries_texts"/>
+                <EntitySet Name="HealthInurances" EntityType="PatientAdmin.HealthInurances"/>
+                <EntitySet Name="Patients" EntityType="PatientAdmin.Patients"/>
+                <AssociationSet Name="Countries_texts_1" Association="PatientAdmin.Countries_texts_1">
+                    <End Role="Countries" EntitySet="Countries"/>
+                    <End Role="Countries_texts" EntitySet="Countries_texts"/>
+                </AssociationSet>
+                <AssociationSet Name="Countries_localized" Association="PatientAdmin.Countries_localized">
+                    <End Role="Countries" EntitySet="Countries"/>
+                    <End Role="Countries_texts" EntitySet="Countries_texts"/>
+                </AssociationSet>
+                <AssociationSet Name="Patients_country" Association="PatientAdmin.Patients_country">
+                    <End Role="Patients" EntitySet="Patients"/>
+                    <End Role="Countries" EntitySet="Countries"/>
+                </AssociationSet>
+                <AssociationSet Name="Patients_HealthNr" Association="PatientAdmin.Patients_HealthNr">
+                    <End Role="Patients" EntitySet="Patients"/>
+                    <End Role="HealthInurances" EntitySet="HealthInurances"/>
+                </AssociationSet>
+            </EntityContainer>
+            <EntityType Name="Countries">
+                <Key>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+                <NavigationProperty Name="texts" Relationship="PatientAdmin.Countries_texts_1" FromRole="Countries" ToRole="Countries_texts"/>
+                <NavigationProperty Name="localized" Relationship="PatientAdmin.Countries_localized" FromRole="Countries" ToRole="Countries_texts"/>
+            </EntityType>
+            <EntityType Name="Countries_texts">
+                <Key>
+                    <PropertyRef Name="locale"/>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="HealthInurances">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                    <PropertyRef Name="benNr"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" MaxLength="6" Nullable="false"/>
+                <Property Name="benNr" Type="Edm.String" MaxLength="2" Nullable="false"/>
+                <Property Name="filial" Type="Edm.String" MaxLength="2"/>
+                <Property Name="control" Type="Edm.String" MaxLength="1"/>
+                <Property Name="TAXCond" Type="Edm.String" MaxLength="2"/>
+                <Property Name="plan" Type="Edm.String" MaxLength="3"/>
+            </EntityType>
+            <EntityType Name="Patients">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" MaxLength="8" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="30"/>
+                <Property Name="lastName" Type="Edm.String" MaxLength="30"/>
+                <Property Name="dni" Type="Edm.Int32"/>
+                <Property Name="birthDate" Type="Edm.DateTime" sap:display-format="Date"/>
+                <Property Name="email" Type="Edm.String" MaxLength="30"/>
+                <Property Name="phone" Type="Edm.Int32"/>
+                <Property Name="address" Type="Edm.String" MaxLength="30"/>
+                <Property Name="city" Type="Edm.String" MaxLength="30"/>
+                <NavigationProperty Name="country" Relationship="PatientAdmin.Patients_country" FromRole="Patients" ToRole="Countries"/>
+                <Property Name="zipcode" Type="Edm.String" MaxLength="30"/>
+                <NavigationProperty Name="HealthNr" Relationship="PatientAdmin.Patients_HealthNr" FromRole="Patients" ToRole="HealthInurances"/>
+                <Property Name="country" Type="Edm.String" MaxLength="3"/>
+                <Property Name="HealthNr_ID" Type="Edm.String" MaxLength="6"/>
+                <Property Name="HealthNr_benNr" Type="Edm.String" MaxLength="2"/>
+            </EntityType>
+            <Association Name="Countries_texts_1">
+                <End Role="Countries" Type="PatientAdmin.Countries" Multiplicity="*"/>
+                <End Role="Countries_texts" Type="PatientAdmin.Countries_texts" Multiplicity="*">
+                    <OnDelete Action="Cascade"/>
+                </End>
+            </Association>
+            <Association Name="Countries_localized">
+                <End Role="Countries" Type="PatientAdmin.Countries" Multiplicity="*"/>
+                <End Role="Countries_texts" Type="PatientAdmin.Countries_texts" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="Countries_texts">
+                        <PropertyRef Name="code"/>
+                    </Principal>
+                    <Dependent Role="Countries">
+                        <PropertyRef Name="code"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="Patients_country">
+                <End Role="Patients" Type="PatientAdmin.Patients" Multiplicity="*"/>
+                <End Role="Countries" Type="PatientAdmin.Countries" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="Countries">
+                        <PropertyRef Name="code"/>
+                    </Principal>
+                    <Dependent Role="Patients">
+                        <PropertyRef Name="country"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="Patients_HealthNr">
+                <End Role="Patients" Type="PatientAdmin.Patients" Multiplicity="*"/>
+                <End Role="HealthInurances" Type="PatientAdmin.HealthInurances" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="HealthInurances">
+                        <PropertyRef Name="ID"/>
+                        <PropertyRef Name="benNr"/>
+                    </Principal>
+                    <Dependent Role="Patients">
+                        <PropertyRef Name="HealthNr_ID"/>
+                        <PropertyRef Name="HealthNr_benNr"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Annotations Target="PatientAdmin.Countries" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="name"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Countries/name" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Name"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Countries/descr" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Description"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Countries/code" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Country Code"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Countries_texts/name" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Name"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Countries_texts/descr" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Description"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Countries_texts/code" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Country Code"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.HealthInurances/plan" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Plan"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.CollectionFacet">
+                            <PropertyValue Property="Label" String="Patient Details"/>
+                            <PropertyValue Property="Facets">
+                                <Collection>
+                                    <Record Type="UI.ReferenceFacet">
+                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Main"/>
+                                        <PropertyValue Property="Label" String="Personal Information"/>
+                                    </Record>
+                                    <Record Type="UI.ReferenceFacet">
+                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Address"/>
+                                        <PropertyValue Property="Label" String="Address Information"/>
+                                    </Record>
+                                </Collection>
+                            </PropertyValue>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="Address">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="address"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="city"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="country"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="zipcode"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="Main">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="ID"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="name"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="lastName"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="birthDate"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="dni"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Description">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="name"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="ID"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String="Patient"/>
+                        <PropertyValue Property="TypeNamePlural" String="Patients"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="ID"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="lastName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="HealthNr/plan"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>ID</PropertyPath>
+                        <PropertyPath>dni</PropertyPath>
+                        <PropertyPath>name</PropertyPath>
+                        <PropertyPath>lastName</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Insurance ID"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/name" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Name"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/lastName" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Last Name"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/dni" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="National ID"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/birthDate" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Birth Date"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/email" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Birth Date"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/phone" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Email"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/address" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Address"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/city" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="City"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/country" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="City"/>
+                <Annotation Term="Core.Description" String="Country code as specified by ISO 3166-1"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/zipcode" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="ZipCode"/>
+            </Annotations>
+            <Annotations Target="PatientAdmin.Patients/country" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="City"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="City"/>
+                        <PropertyValue Property="CollectionPath" String="Countries"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="country"/>
+                                    <PropertyValue Property="ValueListProperty" String="code"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="name"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Core.Description" String="Country code as specified by ISO 3166-1"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

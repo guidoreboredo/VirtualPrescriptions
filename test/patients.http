@@ -1,0 +1,24 @@
+### Get Request
+
+GET http://localhost:4004/patient-admin/Patients?
+
+### POST REQUEST
+POST http://localhost:4004/admin/Patients
+Content-Type: application/json
+
+{ 
+    "ID" : 345839,
+    "benNr" : 01,
+    "name": "Pedro",
+    "secondName": "Hernan",
+    "lastName": "Spinola",
+    "secondLastName" :" ",
+    "dni": 28374569,
+    "birthDate": 1964-04-23,
+    "email": "pedrospinola@hotmail.com",
+    "phone": 113457882, 
+    "address":"Pieres 234", 
+    "city":"CABA",
+    "country": "Argentina",
+    "zipcode":1403
+}
