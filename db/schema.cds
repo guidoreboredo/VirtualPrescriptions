@@ -13,12 +13,7 @@ entity Patients {
         lastName       : String(30);@title : '{i18n>LastName}'
         dni            : Integer;   @title : '{i18n>DNI}'
         birthDate      : Date;      @title : '{i18n>BirthDate}'
-        email          : String(30);@title : '{i18n>Email}'
-        phone          : Integer;   @title : '{i18n>Phone}'
-        address        : String(30);@title : '{i18n>Address}'
-        city           : String(30);@title : '{i18n>City}'
-        country        : String(30);@title : '{i18n>Country}'
-        zipcode        : String(30);
+        contact        : Association to Contacts;
         HealthNr       : Association to HealthInurances
 };
 
@@ -29,20 +24,16 @@ entity Doctors {
         lastName       : String(30);
         dni            : Integer;
         birthDate      : Date;
-        email          : String(30);
-        phone          : Integer;
-        address        : String(30);
-        city           : String(30);
-        country        : String(30);
-        zipcode        : String(30);
+        contact        : Association to Contacts;
         speciality     : String(30);
         healthcenter   : Association to HealthCenters;
 }
 
 @cds.autoexpose
-entity HealthInurances {
+entity HealthInurances{
     key ID: String(8);
     key benNr: String(2);
+    name: String(30);
     filial: String (2);
     control: String(1);
     TAXCond: String(2);
@@ -51,8 +42,9 @@ entity HealthInurances {
 
 
 @cds.autoexpose
-entity Contacts {
-    key ID         : String(6);
+entity Contacts{
+    key ID         : String(8);
+    key TYPE       : String(2);
     email          : String(30);
     phone          : Integer;
     address        : String(30);
@@ -63,8 +55,8 @@ entity Contacts {
 
 
 @cds.autoexpose
-entity HealthCenters: Contacts {
-    key ID         : String(8);
+entity HealthCenters{
+    key ID         : String(8); 
     Type           : String (2);
     name           : String(30);
     speciality     : String(30);

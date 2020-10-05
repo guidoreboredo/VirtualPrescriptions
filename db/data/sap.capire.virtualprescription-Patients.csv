@@ -1,2 +1,2 @@
-ID,name,lastName,dni,birthDate,email,phone,address,city,country,zipcode,HealthNr_ID,HealthNr_benNr
-12345601,Carlos,Gomez,36728773,1990-03-23,carlosgomez@hotmail.com,11234578,Rivadavia 10200,CABA,Argentina,1408,123456,01
+ID,name,lastName,dni,birthDate,contact_ID,contact_TYPE,HealthNr_ID,HealthNr_benNr
+12345601,Carlos,Gomez,36728773,1990-03-23,12345601,01,123456,01

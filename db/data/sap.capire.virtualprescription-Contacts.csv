@@ -1,2 +1,4 @@
-ID;email;phone;address;city;country;zipcode
-000001;test.clinic@clinic.com;45689324;Cerrito 123;Buenos Aires;Argentina;1200
+ID,TYPE,email,phone,address,city,country,zipcode
+12345678,03,test.clinic@clinic.com,45689324,Cerrito 123,Buenos Aires,Argentina,1200
+12345601,01,carlosgomez@hotmail.com,11234578,Rivadavia 10200,CABA,Argentina,1400
+12345678,02,juanperez@hotmail.com,11234578,Rivadavia 10250,CABA,Argentina,1408
