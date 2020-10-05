@@ -1,17 +1,17 @@
 using {sap.capire.virtualprescription as my} from '../db/schema';
 
-service PatientAdmin @(_requires : 'authenticated-user') {
-    entity Patients        as projection on my.Patients;
-    entity HealthInurances as projection on my.HealthInurances;
+service DoctorAdmin @(_requires : 'authenticated-user') {
+    entity doctor  as projection on my.Doctors;
+    entity HealthCenters as projection on my.HealthCenters;
 }
 
 
-annotate PatientAdmin.Patients with @(UI : {
+annotate DoctorAdmin.doctor with @(UI : {
     HeaderInfo       : {
-        TypeName       : 'Patient',
-        TypeNamePlural : 'Patients',
-        Title          : {Value : ID},
-        Description    : {Value: name}
+        TypeName       : 'Doctor',
+        TypeNamePlural : 'Doctors',
+        Title          : {Value : name},
+        Description    : {Value: ID}
     },
     SelectionFields  : [
     ID,
@@ -23,11 +23,11 @@ annotate PatientAdmin.Patients with @(UI : {
     {Value : ID},
     {Value : name},
     {Value : lastName},
-    {Value : HealthNr.plan}
+    {Value : speciality}
     ],
     Facets           : [{
         $Type  : 'UI.CollectionFacet',
-        Label  : 'Patient Details',
+        Label  : 'Doctor Details',
         Facets : [{
             $Type  : 'UI.ReferenceFacet',
             Target : '@UI.FieldGroup#Main',
@@ -36,6 +36,10 @@ annotate PatientAdmin.Patients with @(UI : {
             $Type  : 'UI.ReferenceFacet',
             Target : '@UI.FieldGroup#Address',
             Label  : 'Address Information'
+        },{
+            $Type  : 'UI.ReferenceFacet',
+            Target : '@UI.FieldGroup#HealthCenter',
+            Label  : 'Medical Details'
         }]
     }],
     FieldGroup #Main : {Data : [
@@ -50,19 +54,24 @@ annotate PatientAdmin.Patients with @(UI : {
     {Value : city},
     {Value : country},
     {Value : zipcode},
+    ]},
+    FieldGroup #HealthCenter: {Data : [
+    {Value : speciality},
+    {Value : ID},
+    {Value : HealthCenter.name},
     ]}
 });
 
-annotate PatientAdmin.Patients with {
-    ID @( Common: { Label: '{i18n>Pat.ID}'} );
-    benNr @( Common: { Label: '{i18n>Pat.beneficiaryNumber}'} );
+annotate DoctorAdmin.doctor with {
+    speciality @( Common: { Label: '{i18n>speciality}'} );
+    ID @( Common: { Label: '{i18n>Doc.ID}'} );
     name @( Common: { Label: '{i18n>Name}'} );
     lastName @( Common: { Label: '{i18n>LastName}'} );
     dni @( Common: { Label: '{i18n>DNI}'} );
     birthDate @( Common: { Label: '{i18n>BirthDate}'} );
-    plan @( Common: { Label: '{i18n>Plan}'} );
     address @( Common: { Label: '{i18n>Address}'} );
     city    @( Common: { Label: '{i18n>City}'} );
     country   @( Common: { Label: '{i18n>Country}'} );
     zipcode @( Common: { Label: '{i18n>ZipCode}'} );
 }
+

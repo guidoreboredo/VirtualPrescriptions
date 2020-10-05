@@ -23,7 +23,7 @@ entity Patients {
 };
 
 entity Doctors {
-    key ID             : Integer;
+    key ID             : String(8);
         name           : String(30);
         @title : '{i18n>Name}'
         lastName       : String(30);
@@ -36,14 +36,38 @@ entity Doctors {
         country        : String(30);
         zipcode        : String(30);
         speciality     : String(30);
+        healthcenter   : Association to HealthCenters;
 }
 
 @cds.autoexpose
 entity HealthInurances {
-    key ID: String(6);
+    key ID: String(8);
     key benNr: String(2);
     filial: String (2);
     control: String(1);
     TAXCond: String(2);
     plan: String(3) @title: '{i18n>Plan}'
 }
+
+
+@cds.autoexpose
+entity Contacts {
+    key ID         : String(6);
+    email          : String(30);
+    phone          : Integer;
+    address        : String(30);
+    city           : String(30);
+    country        : String(30);
+    zipcode        : String(30);
+}
+
+
+@cds.autoexpose
+entity HealthCenters: Contacts {
+    key ID         : String(8);
+    Type           : String (2);
+    name           : String(30);
+    speciality     : String(30);
+    contact        : Association to Contacts;
+}
+
