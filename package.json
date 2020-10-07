@@ -20,7 +20,7 @@
   "cds": {
     "requires": {
       "db": {
-        "kind": "sql"
+        "kind": "hana"
       }
     }
   },

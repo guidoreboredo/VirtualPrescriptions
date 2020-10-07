@@ -17,7 +17,7 @@ build-parameters:
       - npx -p @sap/cds-dk cds build --production
 
 modules:
- - name: patientmanagement-app-router
+ - name: virtualprescription-app-router
    type: approuter.nodejs
    path: approuter
    parameters:
@@ -46,11 +46,24 @@ modules:
      requires:
        - name: patientmanagement
          artifacts:
-           - dist/uimodule.zip
+           - dist/uimodulePM.zip
+         target-path: resources/
+       - name: doctorsadmin
+         artifacts:
+           - dist/uimoduleDM.zip
          target-path: resources/
  - name: patientmanagement
    type: html5
    path: patientmanagement
+   build-parameters:
+     builder: custom
+     commands:
+       - npm install
+       - npm run build
+     supported-platforms: []
+ - name: doctorsadmin
+   type: html5
+   path: doctorsadmin
    build-parameters:
      builder: custom
      commands:

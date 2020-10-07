@@ -17,6 +17,9 @@
 				"viz": [{
 					"id": "demo.patientmanagement",
 					"vizId": "data-display"
+				}, {
+					"id": "demo.doctorsadmin",
+					"vizId": "data-display"
 				}]
 			}
 		}],
@@ -32,6 +35,10 @@
 				"viz": [{
 					"id": "demo.patientmanagement-1",
 					"appId": "demo.patientmanagement",
+					"vizId": "data-display"
+				}, {
+					"id": "demo.doctorsadmin-1",
+					"appId": "demo.doctorsadmin",
 					"vizId": "data-display"
 				}]
 			}

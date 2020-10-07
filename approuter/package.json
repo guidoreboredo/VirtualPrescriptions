@@ -1,5 +1,5 @@
 {
-    "name": "patientmanagement-approuter",
+    "name": "virtualprescription-approuter",
     "version": "0.0.1",
     "engines": {
         "node": "12.x.x"

@@ -10,6 +10,12 @@
             "authenticationType": "none",
             "destination": "srv-api",
             "csrfProtection": false
+        },
+        {
+            "source": "^/v2/doctor-admin/(.*)$",
+            "authenticationType": "none",
+            "destination": "srv-api",
+            "csrfProtection": false
         }
     ]
 }

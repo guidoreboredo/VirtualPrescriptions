@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="DoctorAdmin" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="Contacts" EntityType="DoctorAdmin.Contacts"/>
+                <EntitySet Name="HealthCenters" EntityType="DoctorAdmin.HealthCenters"/>
+                <EntitySet Name="doctor" EntityType="DoctorAdmin.doctor"/>
+                <AssociationSet Name="HealthCenters_contact" Association="DoctorAdmin.HealthCenters_contact">
+                    <End Role="HealthCenters" EntitySet="HealthCenters"/>
+                    <End Role="Contacts" EntitySet="Contacts"/>
+                </AssociationSet>
+                <AssociationSet Name="doctor_contact" Association="DoctorAdmin.doctor_contact">
+                    <End Role="doctor" EntitySet="doctor"/>
+                    <End Role="Contacts" EntitySet="Contacts"/>
+                </AssociationSet>
+                <AssociationSet Name="doctor_healthcenter" Association="DoctorAdmin.doctor_healthcenter">
+                    <End Role="doctor" EntitySet="doctor"/>
+                    <End Role="HealthCenters" EntitySet="HealthCenters"/>
+                </AssociationSet>
+            </EntityContainer>
+            <EntityType Name="Contacts">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                    <PropertyRef Name="TYPE"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" MaxLength="8" Nullable="false"/>
+                <Property Name="TYPE" Type="Edm.String" MaxLength="2" Nullable="false"/>
+                <Property Name="email" Type="Edm.String" MaxLength="30"/>
+                <Property Name="phone" Type="Edm.Int32"/>
+                <Property Name="address" Type="Edm.String" MaxLength="30"/>
+                <Property Name="city" Type="Edm.String" MaxLength="30"/>
+                <Property Name="country" Type="Edm.String" MaxLength="30"/>
+                <Property Name="zipcode" Type="Edm.String" MaxLength="30"/>
+            </EntityType>
+            <EntityType Name="HealthCenters">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" MaxLength="8" Nullable="false"/>
+                <Property Name="Type" Type="Edm.String" MaxLength="2"/>
+                <Property Name="name" Type="Edm.String" MaxLength="30"/>
+                <Property Name="speciality" Type="Edm.String" MaxLength="30"/>
+                <NavigationProperty Name="contact" Relationship="DoctorAdmin.HealthCenters_contact" FromRole="HealthCenters" ToRole="Contacts"/>
+                <Property Name="contact_ID" Type="Edm.String" MaxLength="8"/>
+                <Property Name="contact_TYPE" Type="Edm.String" MaxLength="2"/>
+            </EntityType>
+            <EntityType Name="doctor">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" MaxLength="8" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="30"/>
+                <Property Name="lastName" Type="Edm.String" MaxLength="30"/>
+                <Property Name="dni" Type="Edm.Int32"/>
+                <Property Name="birthDate" Type="Edm.DateTime" sap:display-format="Date"/>
+                <NavigationProperty Name="contact" Relationship="DoctorAdmin.doctor_contact" FromRole="doctor" ToRole="Contacts"/>
+                <Property Name="speciality" Type="Edm.String" MaxLength="30"/>
+                <NavigationProperty Name="healthcenter" Relationship="DoctorAdmin.doctor_healthcenter" FromRole="doctor" ToRole="HealthCenters"/>
+                <Property Name="contact_ID" Type="Edm.String" MaxLength="8"/>
+                <Property Name="contact_TYPE" Type="Edm.String" MaxLength="2"/>
+                <Property Name="healthcenter_ID" Type="Edm.String" MaxLength="8"/>
+            </EntityType>
+            <Association Name="HealthCenters_contact">
+                <End Role="HealthCenters" Type="DoctorAdmin.HealthCenters" Multiplicity="*"/>
+                <End Role="Contacts" Type="DoctorAdmin.Contacts" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="Contacts">
+                        <PropertyRef Name="ID"/>
+                        <PropertyRef Name="TYPE"/>
+                    </Principal>
+                    <Dependent Role="HealthCenters">
+                        <PropertyRef Name="contact_ID"/>
+                        <PropertyRef Name="contact_TYPE"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="doctor_contact">
+                <End Role="doctor" Type="DoctorAdmin.doctor" Multiplicity="*"/>
+                <End Role="Contacts" Type="DoctorAdmin.Contacts" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="Contacts">
+                        <PropertyRef Name="ID"/>
+                        <PropertyRef Name="TYPE"/>
+                    </Principal>
+                    <Dependent Role="doctor">
+                        <PropertyRef Name="contact_ID"/>
+                        <PropertyRef Name="contact_TYPE"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="doctor_healthcenter">
+                <End Role="doctor" Type="DoctorAdmin.doctor" Multiplicity="*"/>
+                <End Role="HealthCenters" Type="DoctorAdmin.HealthCenters" Multiplicity="0..1"/>
+                <ReferentialConstraint>
+                    <Principal Role="HealthCenters">
+                        <PropertyRef Name="ID"/>
+                    </Principal>
+                    <Dependent Role="doctor">
+                        <PropertyRef Name="healthcenter_ID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Annotations Target="DoctorAdmin.doctor" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.CollectionFacet">
+                            <PropertyValue Property="Label" String="Doctor Details"/>
+                            <PropertyValue Property="Facets">
+                                <Collection>
+                                    <Record Type="UI.ReferenceFacet">
+                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Main"/>
+                                        <PropertyValue Property="Label" String="Personal Information"/>
+                                    </Record>
+                                    <Record Type="UI.ReferenceFacet">
+                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Address"/>
+                                        <PropertyValue Property="Label" String="Address Information"/>
+                                    </Record>
+                                    <Record Type="UI.ReferenceFacet">
+                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#HealthCenter"/>
+                                        <PropertyValue Property="Label" String="Medical Details"/>
+                                    </Record>
+                                </Collection>
+                            </PropertyValue>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="Address">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="address"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="city"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="country"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="zipcode"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="HealthCenter">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="speciality"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="ID"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="HealthCenter/name"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="Main">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="ID"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="name"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="lastName"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="birthDate"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="dni"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Description">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="ID"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="name"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String="Doctor"/>
+                        <PropertyValue Property="TypeNamePlural" String="Doctors"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="ID"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="lastName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="speciality"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>ID</PropertyPath>
+                        <PropertyPath>dni</PropertyPath>
+                        <PropertyPath>name</PropertyPath>
+                        <PropertyPath>lastName</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="DoctorAdmin.doctor/ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="License Nr."/>
+            </Annotations>
+            <Annotations Target="DoctorAdmin.doctor/name" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Name"/>
+            </Annotations>
+            <Annotations Target="DoctorAdmin.doctor/lastName" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Last Name"/>
+            </Annotations>
+            <Annotations Target="DoctorAdmin.doctor/dni" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="National ID"/>
+            </Annotations>
+            <Annotations Target="DoctorAdmin.doctor/birthDate" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Birth Date"/>
+            </Annotations>
+            <Annotations Target="DoctorAdmin.doctor/speciality" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Speciality"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

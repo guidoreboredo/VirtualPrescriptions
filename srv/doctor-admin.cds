@@ -50,15 +50,15 @@ annotate DoctorAdmin.doctor with @(UI : {
     {Value : dni}
     ]},
     FieldGroup #Address : {Data : [
-    {Value : address},
-    {Value : city},
-    {Value : country},
-    {Value : zipcode},
+    {Value : contact.address},
+    {Value : contact.city},
+    {Value : contact.country},
+    {Value : contact.zipcode},
     ]},
     FieldGroup #HealthCenter: {Data : [
     {Value : speciality},
     {Value : ID},
-    {Value : HealthCenter.name},
+    {Value : HealthCenters.name},
     ]}
 });
 

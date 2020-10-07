@@ -1,6 +1,6 @@
-specVersion: '1.0'
+specVersion: "1.0"
 metadata:
-  name: 'patientmanagement'
+  name: "doctorsadmin"
 type: application
 resources:
   configuration:
@@ -20,7 +20,7 @@ server:
             - /resources
             - /test-resources
           url: https://ui5.sap.com
-          version:  # The UI5 version, for instance, 1.78.1. Empty means latest version
+          version: # The UI5 version, for instance, 1.78.1. Empty means latest version
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
@@ -31,6 +31,6 @@ builder:
     - name: "ui5-task-zipper"
       afterTask: "uglify"
       configuration:
-        archiveName: "uimodulePM"
+        archiveName: "uimoduleDM"
         additionalFiles:
-          - webapp/xs-app.json  
+          - webapp/xs-app.json
