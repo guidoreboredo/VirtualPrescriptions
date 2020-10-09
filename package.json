@@ -7,7 +7,7 @@
   "private": true,
   "dependencies": {
     "@sap/cds": "^4",
-    "@sap/cds-odata-v2-adapter-proxy": "^1.4.46",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.4.47",
     "@sap/hana-client": "^2.5.109",
     "express": "^4"
   },
