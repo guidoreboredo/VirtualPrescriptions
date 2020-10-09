@@ -4,7 +4,8 @@ using {
     Currency,
     managed,
     cuid,
-    Country
+    Country,
+    sap,
 } from '@sap/cds/common';
 
 entity Patients {
@@ -57,9 +58,13 @@ entity Contacts{
 @cds.autoexpose
 entity HealthCenters{
     key ID         : String(8); 
-    Type           : String (2);
+    type           : Association to HealthCentersTypes;
     name           : String(30);
     speciality     : String(30);
     contact        : Association to Contacts;
+}
+
+entity HealthCentersTypes: sap.common.CodeList{
+    key ID: String(2);
 }
 

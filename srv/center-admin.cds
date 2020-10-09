@@ -1,85 +1,64 @@
 using {sap.capire.virtualprescription as my} from '../db/schema';
 
-service DoctorAdmin @(_requires : 'authenticated-user') {
-    entity doctor as projection on my.Doctors;
+service CenterAdmin @(_requires : 'authenticated-user') {
+    entity HealthCenters as projection on my.HealthCenters;
 }
 
 
-annotate DoctorAdmin.doctor with @(UI : {
+annotate CenterAdmin.HealthCenters with @(UI : {
     HeaderInfo               : {
-        TypeName       : 'Doctor',
-        TypeNamePlural : 'Doctors',
+        TypeName       : 'Health Centers',
+        TypeNamePlural : 'Health Center',
         Title          : {Value : name},
         Description    : {Value : ID}
     },
     SelectionFields          : [
     ID,
-    dni,
+    type,
     name,
-    lastName
+    speciality
     ],
     LineItem                 : [
     {Value : ID},
     {Value : name},
-    {Value : lastName},
+    {Value : type.descr},
     {Value : speciality}
     ],
     Facets                   : [{
         $Type  : 'UI.CollectionFacet',
-        Label  : 'Doctor Details',
+        Label  : 'Health Center Details',
         Facets : [
             {
                 $Type  : 'UI.ReferenceFacet',
                 Target : '@UI.FieldGroup#Main',
-                Label  : 'Personal Information'
+                Label  : 'Center Details'
             },
             {
                 $Type  : 'UI.ReferenceFacet',
                 Target : '@UI.FieldGroup#Address',
                 Label  : 'Address Information'
-            },
-            {
-                $Type  : 'UI.ReferenceFacet',
-                Target : '@UI.FieldGroup#HealthCenter',
-                Label  : 'Medical Details'
             }
         ]
     }],
     FieldGroup #Main         : {Data : [
     {Value : ID},
     {Value : name},
-    {Value : lastName},
-    {Value : birthDate},
-    {Value : dni}
+    {Value : type.descr},
+    {Value : speciality},
     ]},
     FieldGroup #Address      : {Data : [
     {Value : contact.address},
     {Value : contact.city},
     {Value : contact.country},
     {Value : contact.zipcode},
-    ]},
-    FieldGroup #HealthCenter : {Data : [
-    {Value : speciality},
-    {Value : ID},
-    {
-        $Type : 'UI.DataField',
-        Value : healthcenter.name,
-        Label : '{i18n>helthcenterName}'
-    },
     ]}
 });
 
-annotate DoctorAdmin.doctor with {
+annotate CenterAdmin.HealthCenters with {
     speciality @(Common : {Label : '{i18n>speciality}'});
-    ID         @(Common : {Label : '{i18n>Doc.ID}'});
+    ID         @(Common : {Label : '{i18n>ID}'});
     name       @(Common : {Label : '{i18n>Name}'});
-    lastName   @(Common : {Label : '{i18n>LastName}'});
-    dni        @(Common : {Label : '{i18n>DNI}'});
-    birthDate  @(Common : {Label : '{i18n>BirthDate}'});
-    address    @(Common : {Label : '{i18n>Address}'});
-    city       @(Common : {Label : '{i18n>City}'});
-    country    @(Common : {Label : '{i18n>Country}'});
-    zipcode    @(Common : {Label : '{i18n>ZipCode}'});
+    type       @(Common : {Label : '{i18n>CenterType}'});
 }
 
 

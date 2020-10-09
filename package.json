@@ -20,7 +20,10 @@
   "cds": {
     "requires": {
       "db": {
-        "kind": "hana"
+        "kind": "sqlite",
+        "credentials": {
+          "database": "virtualprescription.db"
+        }
       }
     }
   },

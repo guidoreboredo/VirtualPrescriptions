@@ -1,2 +1,2 @@
-ID;type;name;speciality;contact_ID;contact_TYPE
+ID;type_ID;name;speciality;contact_ID;contact_TYPE
 12345678;01;Test Clinic;1;12345678;03
