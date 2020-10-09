@@ -14,7 +14,7 @@ annotate CenterAdmin.HealthCenters with @(UI : {
     },
     SelectionFields          : [
     ID,
-    type,
+    type.descr,
     name,
     speciality
     ],
