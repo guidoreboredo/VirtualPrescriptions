@@ -80,10 +80,3 @@ annotate PatientAdmin.Patients with {
 annotate PatientAdmin.HealthInurances with {
     name @( Common: { Label: '{i18n>InsuranceCompany}'} ); 
 }
-
-annotate contact  with{
-    address @( Common: { Label: '{i18n>Address}'} );
-    city    @( Common: { Label: '{i18n>City}'} );
-    country @( Common: { Label: '{i18n>Country}'} );
-    zipcode @( Common: { Label: '{i18n>ZipCode}'} );
-} ;

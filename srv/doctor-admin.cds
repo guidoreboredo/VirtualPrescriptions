@@ -24,6 +24,11 @@ annotate DoctorAdmin.doctor with @(UI : {
     {Value : lastName},
     {Value : speciality}
     ],
+    HeaderFacets             : [{
+        $Type  : 'UI.ReferenceFacet',
+        Target : '@UI.FieldGroup#Header',
+        Label  : 'Doctor'
+    }],
     Facets                   : [{
         $Type  : 'UI.CollectionFacet',
         Label  : 'Doctor Details',
@@ -45,6 +50,13 @@ annotate DoctorAdmin.doctor with @(UI : {
             }
         ]
     }],
+    FieldGroup #Header       : {Data : [
+    {Value : lastName},
+    {Value : birthDate},
+    {Value : dni},
+    {Value : ID},
+    {Value : speciality},
+    ]},
     FieldGroup #Main         : {Data : [
     {Value : ID},
     {Value : name},
@@ -81,11 +93,3 @@ annotate DoctorAdmin.doctor with {
     country    @(Common : {Label : '{i18n>Country}'});
     zipcode    @(Common : {Label : '{i18n>ZipCode}'});
 }
-
-
-annotate contact  with{
-    address @( Common: { Label: '{i18n>Address}'} );
-    city    @( Common: { Label: '{i18n>City}'} );
-    country @( Common: { Label: '{i18n>Country}'} );
-    zipcode @( Common: { Label: '{i18n>ZipCode}'} );
-} ;

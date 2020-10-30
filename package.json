@@ -18,12 +18,16 @@
     "start": "npx cds run"
   },
   "cds": {
+    "cds": {
+      "requires": {
+        "db": {
+          "kind": "hana"
+        }
+      }
+    },
     "requires": {
       "db": {
-        "kind": "sqlite",
-        "credentials": {
-          "database": "virtualprescription.db"
-        }
+        "kind": "sql"
       }
     }
   },

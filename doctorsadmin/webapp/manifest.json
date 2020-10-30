@@ -9,20 +9,20 @@
         },
         "title": "{{appTitle}}",
         "description": "{{appDescription}}",
-		"crossNavigation": {
-			"inbounds": {
-				"intent1": {
-					"signature": {
-						"parameters": {},
-						"additionalParameters": "allowed"
-					},
-					"semanticObject": "data",
-					"action": "display",
-					"title": "{{appTitle}}",
-					"icon": "sap-icon://doctor"
-				}
-			}
-		},        
+        "crossNavigation": {
+            "inbounds": {
+                "intent1": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "data",
+                    "action": "display",
+                    "title": "{{appTitle}}",
+                    "icon": "sap-icon://doctor"
+                }
+            }
+        },
         "tags": {
             "keywords": []
         },
@@ -114,7 +114,20 @@
             }
         },
         "extends": {
-            "extensions": {}
+            "extensions": {
+                "sap.ui.viewExtensions": {
+                    "sap.suite.ui.generic.template.ObjectPage.view.Details": {
+                        "AfterFacet|doctor|@com.sap.vocabularies.UI.v1.Facets::0": {
+                            "className": "sap.ui.core.Fragment",
+                            "fragmentName": "demo.doctorsadmin.ext.fragment.HealthCenter",
+                            "type": "XML",
+                            "sap.ui.generic.app": {
+                                "title": "HealthCenters"
+                            }
+                        }
+                    }
+                }
+            }
         },
         "contentDensities": {
             "compact": true,

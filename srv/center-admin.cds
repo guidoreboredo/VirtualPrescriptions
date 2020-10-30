@@ -1,37 +1,42 @@
 using {sap.capire.virtualprescription as my} from '../db/schema';
 
 service CenterAdmin @(_requires : 'authenticated-user') {
+    @odata.draft.enabled
     entity HealthCenters as projection on my.HealthCenters;
 }
 
-
 annotate CenterAdmin.HealthCenters with @(UI : {
-    HeaderInfo               : {
+    HeaderInfo          : {
         TypeName       : 'Health Centers',
         TypeNamePlural : 'Health Center',
         Title          : {Value : name},
         Description    : {Value : ID}
     },
-    SelectionFields          : [
+    SelectionFields     : [
     ID,
     type.descr,
     name,
     speciality
     ],
-    LineItem                 : [
+    LineItem            : [
     {Value : ID},
     {Value : name},
-    {Value : type.descr},
+    {Value : type.descr, Label : '{i18n>CenterType}'},
     {Value : speciality}
     ],
-    Facets                   : [{
+    HeaderFacets        : [{
+        $Type  : 'UI.ReferenceFacet',
+        Target : '@UI.FieldGroup#Header',
+        Label  : 'Health Center'
+    }],
+    Facets              : [{
         $Type  : 'UI.CollectionFacet',
         Label  : 'Health Center Details',
         Facets : [
             {
                 $Type  : 'UI.ReferenceFacet',
-                Target : '@UI.FieldGroup#Main',
-                Label  : 'Center Details'
+                Target : '@UI.FieldGroup#ContactInfo',
+                Label  : 'Contact Details'
             },
             {
                 $Type  : 'UI.ReferenceFacet',
@@ -40,19 +45,24 @@ annotate CenterAdmin.HealthCenters with @(UI : {
             }
         ]
     }],
-    FieldGroup #Main         : {Data : [
-    {Value : ID},
+    FieldGroup #Header    : {Data : [
     {Value : name},
     {Value : type.descr},
-    {Value : speciality},
+    {Value : speciality, Label : '{i18n>CenterType}'},
     ]},
-    FieldGroup #Address      : {Data : [
+    FieldGroup #ContactInfo : {Data : [
+    {Value : contact.email},
+    {Value : contact.phone},
+    ]},
+    FieldGroup #Address : {Data : [
     {Value : contact.address},
     {Value : contact.city},
     {Value : contact.country},
     {Value : contact.zipcode},
     ]}
 });
+
+
 
 annotate CenterAdmin.HealthCenters with {
     speciality @(Common : {Label : '{i18n>speciality}'});
@@ -61,10 +71,3 @@ annotate CenterAdmin.HealthCenters with {
     type       @(Common : {Label : '{i18n>CenterType}'});
 }
 
-
-annotate contact  with{
-    address @( Common: { Label: '{i18n>Address}'} );
-    city    @( Common: { Label: '{i18n>City}'} );
-    country @( Common: { Label: '{i18n>Country}'} );
-    zipcode @( Common: { Label: '{i18n>ZipCode}'} );
-} ;

@@ -51,13 +51,26 @@ entity HealthInurances {
 entity Contacts {
     key ID      : String(8);
     key TYPE    : String(2);
+        @(Common : {Label : '{i18n>Email}'})
         email   : String(30);
-        phone   : Integer;
+        @(Common : {Label : '{i18n>Phone}'})
+        phone   :  Integer;
+        @(Common : {Label : '{i18n>Address}'})
         address : String(30);
+        @(Common : {Label : '{i18n>City}'})
         city    : String(30);
+        @(Common : {Label : '{i18n>Country}'})
         country : String(30);
+        @(Common : {Label : '{i18n>ZipCode}'})
         zipcode : String(30);
 }
+
+
+entity Doctors_Centers{
+    key drID     : String(8);
+    key centerID : String(8);
+}
+
 
 
 @cds.autoexpose

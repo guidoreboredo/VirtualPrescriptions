@@ -1,0 +1,11 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:l="sap.ui.layout">
+	<l:VerticalLayout>
+		<Text text="HealthCenter"/>
+		
+	</l:VerticalLayout>
+	<List noDataText="Drop list items here" id="list0" items="{/HealthCenters}">
+	    <items>
+	        <StandardListItem type="Navigation" title="{name}" description="{ID}" icon="sap-icon://building" id="CenterList" activeIcon="sap-icon://building"/>
+	    </items>
+	</List>
+</core:FragmentDefinition>
